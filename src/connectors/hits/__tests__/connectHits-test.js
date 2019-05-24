@@ -354,6 +354,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
+      const helper = algoliasearchHelper({}, '');
+
       const renderFn = () => {};
       const unmountFn = jest.fn();
       const makeWidget = connectHits(renderFn, unmountFn);
@@ -361,9 +363,33 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/hits/js/#co
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose();
+      widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
+
+    it('removes the TAG_PLACEHOLDER from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper({}, '');
+
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectHits(renderFn, unmountFn);
+      const widget = makeWidget();
+
+      helper.setState(widget.getConfiguration());
+
+      expect(helper.state.highlightPreTag).toBe(
+        TAG_PLACEHOLDER.highlightPreTag
+      );
+
+      expect(helper.state.highlightPostTag).toBe(
+        TAG_PLACEHOLDER.highlightPostTag
+      );
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.highlightPreTag).toBeUndefined();
+      expect(nextState.highlightPostTag).toBeUndefined();
     });
   });
 });
