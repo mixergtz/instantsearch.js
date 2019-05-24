@@ -1,4 +1,4 @@
-import jsHelper, { SearchResults } from 'algoliasearch-helper';
+import algoliasearchHelper, { SearchResults } from 'algoliasearch-helper';
 import connectAutocomplete from '../connectAutocomplete';
 import { TAG_PLACEHOLDER } from '../../../lib/escape-highlight';
 
@@ -23,7 +23,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     expect(renderFn).toHaveBeenCalledTimes(0);
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     widget.init({
@@ -62,7 +62,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget({ indices: [{ label: 'foo', value: 'foo' }] });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     widget.init({ helper, instantSearchInstance: {} });
@@ -79,7 +79,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget();
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     widget.init({ helper, instantSearchInstance: {} });
@@ -98,7 +98,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget({ escapeHTML: true });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     const hits = [
@@ -145,7 +145,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget({ escapeHTML: false });
 
-    const helper = jsHelper(fakeClient, '', {});
+    const helper = algoliasearchHelper(fakeClient, '', {});
     helper.search = jest.fn();
 
     const hits = [
@@ -176,7 +176,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   describe('dispose', () => {
     it('calls the unmount function', () => {
-      const helper = jsHelper(fakeClient, 'firstIndex');
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
 
       const renderFn = () => {};
       const unmountFn = jest.fn();
@@ -194,7 +194,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
     it('removes the created DerivedHelper', () => {
       const detach = jest.fn();
-      const helper = jsHelper(fakeClient, 'firstIndex');
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
       helper.derive = () => ({
         on() {},
         detach,
