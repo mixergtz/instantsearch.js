@@ -17,7 +17,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('renders during init and render', () => {
     const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const unmountFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget();
 
     expect(renderFn).toHaveBeenCalledTimes(0);
@@ -45,7 +46,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('sets the default configuration', () => {
     const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const unmountFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget();
 
     expect(widget.getConfiguration()).toEqual({
@@ -56,7 +58,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('creates derived helper', () => {
     const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const unmountFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget({ indices: [{ label: 'foo', value: 'foo' }] });
 
     const helper = jsHelper(fakeClient, '', {});
@@ -72,7 +75,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('set a query and trigger search on `refine`', () => {
     const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const unmountFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget();
 
     const helper = jsHelper(fakeClient, '', {});
@@ -90,7 +94,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('with escapeHTML should escape the hits', () => {
     const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const unmountFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget({ escapeHTML: true });
 
     const helper = jsHelper(fakeClient, '', {});
@@ -136,7 +141,8 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
   it('without escapeHTML should not escape the hits', () => {
     const renderFn = jest.fn();
-    const makeWidget = connectAutocomplete(renderFn);
+    const unmountFn = () => {};
+    const makeWidget = connectAutocomplete(renderFn, unmountFn);
     const widget = makeWidget({ escapeHTML: false });
 
     const helper = jsHelper(fakeClient, '', {});
@@ -166,5 +172,20 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
     const rendering = renderFn.mock.calls[1][0];
 
     expect(rendering.indices[0].hits).toEqual(hits);
+  });
+
+  describe('dispose', () => {
+    it('calls the unmount function', () => {
+      const renderFn = () => {};
+      const unmountFn = jest.fn();
+      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const widget = makeWidget();
+
+      expect(unmountFn).toHaveBeenCalledTimes(0);
+
+      widget.dispose();
+
+      expect(unmountFn).toHaveBeenCalledTimes(1);
+    });
   });
 });
