@@ -187,7 +187,7 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
       expect(unmountFn).toHaveBeenCalledTimes(0);
 
-      widget.dispose();
+      widget.dispose({ helper, state: helper.state });
 
       expect(unmountFn).toHaveBeenCalledTimes(1);
     });
@@ -214,9 +214,25 @@ See documentation: https://www.algolia.com/doc/api-reference/widgets/autocomplet
 
       expect(detach).toHaveBeenCalledTimes(0);
 
-      widget.dispose();
+      widget.dispose({ helper, state: helper.state });
 
       expect(detach).toHaveBeenCalledTimes(2);
+    });
+
+    it('removes the `query` from the `SearchParameters`', () => {
+      const helper = algoliasearchHelper(fakeClient, 'firstIndex');
+      helper.setQueryParameter('query', 'Apple');
+
+      const renderFn = () => {};
+      const unmountFn = () => {};
+      const makeWidget = connectAutocomplete(renderFn, unmountFn);
+      const widget = makeWidget();
+
+      widget.init({ helper, instantSearchInstance: {} });
+
+      const nextState = widget.dispose({ helper, state: helper.state });
+
+      expect(nextState.query).toBeUndefined();
     });
   });
 });
